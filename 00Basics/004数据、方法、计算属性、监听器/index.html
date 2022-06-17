@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>数据、方法、计算属性、监听器</title>
+  <script src="../../vue.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+</body>
+<script>
+  //watch、methods和computed都能实现一个功能的时候，建议使用computed
+  //computed会有一定的缓存，性能较高，比较简洁，其只有在其依赖发生变化的时候才会发生改变
+  //method中的方法，当视图发生改变，并且其中涉及到计算函数的时候才会发生变化，比较迷
+  const app = Vue.createApp({
+    //data表示应用内的数据
+    data(){
+      return {
+        count: 1,
+        price: 5,
+        watchTotla:5,
+        text:9
+      }
+    },
+    watch:{
+      price(newV, oldV){
+        return this.watchTotla = newV * this.count
+      }
+    },
+    computed:{
+      computedTotla(){
+        return this.count * this.price
+        
+      },
+      computedTime(){
+        return Date.now() + this.count + this.price
+      }
+    },
+    methods:{
+      methodsTime(){
+        console.log(999)
+        return Date.now() + this.count + this.price
+      },
+      priceAdd(){
+        this.price ++
+      },
+      countAdd(){
+        this.count ++
+      },
+      textAdd(){
+        this.text ++
+      },
+    },
+    template:`
+    <div>
+      <div>
+        <p>测试watch和computed：</p>
+        <p>改变price，watchTotla和computedTotla都发生改变，改变count只有computedTotla发生改变</p>
+        count:{{count}}  watchTotla:{{watchTotla}} computedTotla:{{computedTotla}}
+      </div>
+      <div>
+        <p>测试watch和computed：</p>
+        <p>改变price和count，methodsTime和computedTime都发生改变，改变text,只有methodsTime发生改变</p>
+        text:{{text}}  methodsTime:{{methodsTime()}} computedTime:{{computedTime}}
+      </div>
+      <div>
+        如果methods中的methodsTime方法中再次调用其他函数的情况下，改变视图的时候，methodsTime会再次调用,如果methods中的methodsTime方法中没有调用其他函数，则是图改变的时候，不会调用methods中的methodsTime方法，很迷
+      </div>
+      <button @click="priceAdd">price + 1 </button><br>
+      <button @click="countAdd">count + 1 </button><br>
+      <button @click="textAdd">text + 1 </button>
+    </div>`
+  })
+  //mount这里表示创建的应用只作用在#root的元素内
+  const vm = app.mount("#root")
+
+</script>
+</html>

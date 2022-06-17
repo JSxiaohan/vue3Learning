@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>模版语法</title>
+  <script src="../../vue.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+</body>
+<script>
+  //v-html v-once v-bind v-if v-on 动态属性  修饰符
+  //Vue.createApp表示创建一个Vue应用
+  const app = Vue.createApp({
+    //data表示应用内的数据
+    data(){
+      return {
+        msg: "123",
+        vhtml:"<strong>v-html</strong>",
+        vonce:"v-once",
+        vbind:"v-bind",
+        vD:"title",
+        vIf:true,
+        vOn:"click"
+      }
+    },
+    methods:{
+      handleClick(e){
+        alert(9999)
+      }
+    },
+    /*此时无法正确绘制数据中的标签，其相当于v-text*/
+    //template:'<div>{{msg}}</div>'
+    // template:'<div v-text="msg">{{msg}}</div>'
+
+    /*使用v-html可以正确绘制标签*/
+    //template:'<div v-html="vhtml"></div>'
+
+    /*使用v-once，对应的数据只会渲染一次，如下，1s之后视图不会发生变化*/
+    //template:'<div v-once>vonce</div>'
+
+
+   /*使用v-bind可以添加属性, v-bind:title="vhtml"对应语法糖是  :title="title" 动态属性:[vD]="title"*/
+    //template:'<div v-bind:title="vbind">{{msg}}</div>'
+    //template:'<div :title="vbind">{{msg}}</div>'
+    //template:'<div :[vD]="vbind">{{msg}}</div>'
+
+
+    /*v-if控制Dom元素是否渲染到页面，当vIf未true时正常渲染，当vIf为false时，不会渲染到页面*/
+    //template:'<div v-if="vIf">{{msg}}</div>'
+
+
+    /*v-on绑定事件，事件函数需要写在methods中, v-on:click="handleClick"语法糖是 @click="handleClick"，可以使用动态属性,此时动态属性不常用*/
+    // template:'<div v-on:click="handleClick">{{msg}}</div>'
+    // template:'<div @click="handleClick">{{msg}}</div>'
+    // template:'<div @[vOn]="handleClick">{{msg}}</div>'
+
+
+    /*修饰符，阻止默认事件*/
+    // template:'<a href="https://www.baidu.com" @[vOn].prevent="handleClick">{{msg}}</a>'
+
+    /*不渲染括号内的数据，直接显示双括号*/
+    template:'<div v-pre>{{msg}}</div>'
+  })
+  //mount这里表示创建的应用只作用在#root的元素内
+  const vm = app.mount("#root")
+  setTimeout(()=>{
+    vm.$data.vonce = "hello";
+    vm.$data.vIf = false
+    console.log(vm.$data)//获取Vue应用内的数据
+  },1000)
+  
+</script>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>生命周期</title>
+  <script src="../../vue.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+</body>
+<script>
+  //生命周期函数：在某一个特定时期自动执行的函数
+  const app = Vue.createApp({
+    //data表示应用内的数据
+    data(){
+      return {
+        msg: "123"
+      }
+    },
+    //实例生成之前执行
+    beforeCreate(){
+      console.log('在组件实例初始化完成之后立即调用。beforeCreate')
+      console.log('会在实例初始化完成、prop 解析之后、data() 和 computed 等选项处理之前立即调用。')
+    },
+    //实例生成之后执行
+    created(){
+      console.log('在组件实例处理完所有与状态相关的选项后调用。created')
+      console.log(document.getElementById("root").innerHTML)//空
+    },
+    //在组建被渲染到页面之前执行，无法获取#root节点下的html
+    beforeMount(){
+      console.log('在组件被挂载之前调用。beforMount')
+      console.log(document.getElementById("root").innerHTML)//<div>123</div>
+    },
+    //在组建被渲染到页面之后执行，可以获取#root下的html
+    mounted(){
+      console.log('在组件被挂载之后调用。mounted')
+    },
+    //数据改变之前执行
+    beforeUpdate(){
+      console.log('在组件即将因为一个响应式状态变更而更新其 DOM 树之前调用。beforeUpdate')
+      console.log(document.getElementById("root").innerHTML)//<div>123</div>
+    },
+    //数据改变之后执行
+    updated(){
+      console.log('在组件即将因为一个响应式状态变更而更新其 DOM 树之后调用。updated')
+      console.log(document.getElementById("root").innerHTML)//<div>update</div>
+    },
+    //Vue应用失效之前
+    beforeUnmount(){
+      console.log('在一个组件实例被卸载之前调用。beforeUnmount')
+      console.log(document.getElementById("root").innerHTML)//<div>update</div>
+    },
+    //Vue销毁之后，DOM销毁之后
+    unmounted(){
+      console.log('在一个组件实例被卸载之后调用。unmounted')
+      console.log(document.getElementById("root").innerHTML)//空
+    },
+    template:'<div>{{msg}}</div>'
+  })
+  //mount这里表示创建的应用只作用在#root的元素内
+  const vm = app.mount("#root");
+  setTimeout(()=>{
+    vm.$data.msg = 'update'
+  },1000)
+  setTimeout(()=>{
+    app.unmount()
+  },3000)
+</script>
+</html>

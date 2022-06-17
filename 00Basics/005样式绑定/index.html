@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>组建和基础概念</title>
+  <script src="../../vue.js"></script>
+  <style>
+    .green{
+      color: green;
+    }
+    .font2{
+      font-size: 20px;
+    }
+    .red{
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+</body>
+<script>
+  //Vue.createApp表示创建一个Vue应用
+  //app表示创建应用的返回
+  const app = Vue.createApp({
+    //data表示应用内的数据
+    data(){
+      return {
+        styleStr:'color:blue;font-size:30px',
+        styleObj:{
+          color:"orange",
+          fontSize:"25px"
+        },
+        classStr:"green",
+        classObj:{
+          green:true,
+          font2:true
+        },
+        classArr:['red',{font2:true}]
+      }
+    },
+    template:`<div>
+      <div :class="classStr">classStr</div>
+      <div :class="classObj">classObj</div>
+      <div :class="classArr">classArr</div>
+      <div :style="styleStr">styleStr</div>
+      <div :style="styleObj">styleObj</div>
+      <demo1 class="green"></demo1>
+      <demo2 class="red"></demo1>
+    </div>`
+  })
+
+  app.component("demo1",{
+    template:'<div>demo1</div>'
+  })
+
+  app.component("demo2",{
+    template:`
+      <div :class="$attrs.class">demo2-1</div>
+      <div>demo2-2</div>
+    `
+  })
+  //mount这里表示创建的应用只作用在#root的元素内
+  const vm = app.mount("#root")
+
+  console.log(vm.$data)//获取Vue应用内的数据
+</script>
+</html>
